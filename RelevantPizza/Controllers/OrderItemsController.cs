@@ -7,26 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RelevantPizza.Data;
 using RelevantPizza.Models;
-using RelevantPizza.ViewModels;
 
 namespace RelevantPizza.Controllers
 {
-    public class EmployeeController : Controller
+    public class OrderItemsController : Controller
     {
         private readonly PizzaContext _context;
 
-        public EmployeeController(PizzaContext context)
+        public OrderItemsController(PizzaContext context)
         {
             _context = context;
         }
 
-        // GET: Employee
+        // GET: OrderItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.OrderItems.ToListAsync());
         }
 
-        // GET: Employee/Details/5
+        // GET: OrderItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +33,39 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var orderItem = await _context.OrderItems
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (employee == null)
+            if (orderItem == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(orderItem);
         }
 
-        // GET: Employee/Create
+        // GET: OrderItems/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employee/Create
+        // POST: OrderItems/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Role,PhoneNumber,Salary")] Employee employee)
+        public async Task<IActionResult> Create([Bind("ID,Type,Price")] OrderItem orderItem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(orderItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(orderItem);
         }
 
-        // GET: Employee/Edit/5
+        // GET: OrderItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +73,22 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var orderItem = await _context.OrderItems.FindAsync(id);
+            if (orderItem == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(orderItem);
         }
 
-        // POST: Employee/Edit/5
+        // POST: OrderItems/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Role,PhoneNumber,Salary")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Type,Price")] OrderItem orderItem)
         {
-            if (id != employee.ID)
+            if (id != orderItem.ID)
             {
                 return NotFound();
             }
@@ -98,12 +97,12 @@ namespace RelevantPizza.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(orderItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.ID))
+                    if (!OrderItemExists(orderItem.ID))
                     {
                         return NotFound();
                     }
@@ -114,10 +113,10 @@ namespace RelevantPizza.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(orderItem);
         }
 
-        // GET: Employee/Delete/5
+        // GET: OrderItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +124,30 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var orderItem = await _context.OrderItems
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (employee == null)
+            if (orderItem == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(orderItem);
         }
 
-        // POST: Employee/Delete/5
+        // POST: OrderItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employee);
+            var orderItem = await _context.OrderItems.FindAsync(id);
+            _context.OrderItems.Remove(orderItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool OrderItemExists(int id)
         {
-            return _context.Employees.Any(e => e.ID == id);
+            return _context.OrderItems.Any(e => e.ID == id);
         }
     }
 }

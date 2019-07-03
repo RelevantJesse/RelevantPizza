@@ -7,26 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RelevantPizza.Data;
 using RelevantPizza.Models;
-using RelevantPizza.ViewModels;
 
 namespace RelevantPizza.Controllers
 {
-    public class EmployeeController : Controller
+    public class OrderItemDetailsController : Controller
     {
         private readonly PizzaContext _context;
 
-        public EmployeeController(PizzaContext context)
+        public OrderItemDetailsController(PizzaContext context)
         {
             _context = context;
         }
 
-        // GET: Employee
+        // GET: OrderItemDetails
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Employees.ToListAsync());
+            return View(await _context.OrderItemDetails.ToListAsync());
         }
 
-        // GET: Employee/Details/5
+        // GET: OrderItemDetails/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,39 +33,39 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var orderItemDetail = await _context.OrderItemDetails
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (employee == null)
+            if (orderItemDetail == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(orderItemDetail);
         }
 
-        // GET: Employee/Create
+        // GET: OrderItemDetails/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Employee/Create
+        // POST: OrderItemDetails/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,FirstName,LastName,Role,PhoneNumber,Salary")] Employee employee)
+        public async Task<IActionResult> Create([Bind("ID,Type")] OrderItemDetail orderItemDetail)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                _context.Add(orderItemDetail);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(orderItemDetail);
         }
 
-        // GET: Employee/Edit/5
+        // GET: OrderItemDetails/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -74,22 +73,22 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
+            var orderItemDetail = await _context.OrderItemDetails.FindAsync(id);
+            if (orderItemDetail == null)
             {
                 return NotFound();
             }
-            return View(employee);
+            return View(orderItemDetail);
         }
 
-        // POST: Employee/Edit/5
+        // POST: OrderItemDetails/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,FirstName,LastName,Role,PhoneNumber,Salary")] Employee employee)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Type")] OrderItemDetail orderItemDetail)
         {
-            if (id != employee.ID)
+            if (id != orderItemDetail.ID)
             {
                 return NotFound();
             }
@@ -98,12 +97,12 @@ namespace RelevantPizza.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    _context.Update(orderItemDetail);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!EmployeeExists(employee.ID))
+                    if (!OrderItemDetailExists(orderItemDetail.ID))
                     {
                         return NotFound();
                     }
@@ -114,10 +113,10 @@ namespace RelevantPizza.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(employee);
+            return View(orderItemDetail);
         }
 
-        // GET: Employee/Delete/5
+        // GET: OrderItemDetails/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -125,30 +124,30 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var employee = await _context.Employees
+            var orderItemDetail = await _context.OrderItemDetails
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (employee == null)
+            if (orderItemDetail == null)
             {
                 return NotFound();
             }
 
-            return View(employee);
+            return View(orderItemDetail);
         }
 
-        // POST: Employee/Delete/5
+        // POST: OrderItemDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employee);
+            var orderItemDetail = await _context.OrderItemDetails.FindAsync(id);
+            _context.OrderItemDetails.Remove(orderItemDetail);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EmployeeExists(int id)
+        private bool OrderItemDetailExists(int id)
         {
-            return _context.Employees.Any(e => e.ID == id);
+            return _context.OrderItemDetails.Any(e => e.ID == id);
         }
     }
 }

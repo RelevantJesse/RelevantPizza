@@ -10,8 +10,6 @@ namespace RelevantPizza.Data
     {
         public static void Initialize(PizzaContext context)
         {
-            context.Database.EnsureCreated();
-
             if (context.Employees.Any())
             {
                 return;
