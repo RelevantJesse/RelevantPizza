@@ -10,22 +10,22 @@ using RelevantPizza.Models;
 
 namespace RelevantPizza.Controllers
 {
-    public class OrderItemDetailsController : Controller
+    public class InventoryItemsController : Controller
     {
         private readonly PizzaContext _context;
 
-        public OrderItemDetailsController(PizzaContext context)
+        public InventoryItemsController(PizzaContext context)
         {
             _context = context;
         }
 
-        // GET: OrderItemDetails
+        // GET: InventoryItems
         public async Task<IActionResult> Index()
         {
-            return View(await _context.OrderItemDetails.ToListAsync());
+            return View(await _context.InventoryItems.ToListAsync());
         }
 
-        // GET: OrderItemDetails/Details/5
+        // GET: InventoryItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var orderItemDetail = await _context.OrderItemDetails
+            var inventoryItem = await _context.InventoryItems
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (orderItemDetail == null)
+            if (inventoryItem == null)
             {
                 return NotFound();
             }
 
-            return View(orderItemDetail);
+            return View(inventoryItem);
         }
 
-        // GET: OrderItemDetails/Create
+        // GET: InventoryItems/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: OrderItemDetails/Create
+        // POST: InventoryItems/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Type")] OrderItemDetail orderItemDetail)
+        public async Task<IActionResult> Create([Bind("ID,Name,Type,QuantityRemaining,PricePerUnit")] InventoryItem inventoryItem)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orderItemDetail);
+                _context.Add(inventoryItem);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(orderItemDetail);
+            return View(inventoryItem);
         }
 
-        // GET: OrderItemDetails/Edit/5
+        // GET: InventoryItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var orderItemDetail = await _context.OrderItemDetails.FindAsync(id);
-            if (orderItemDetail == null)
+            var inventoryItem = await _context.InventoryItems.FindAsync(id);
+            if (inventoryItem == null)
             {
                 return NotFound();
             }
-            return View(orderItemDetail);
+            return View(inventoryItem);
         }
 
-        // POST: OrderItemDetails/Edit/5
+        // POST: InventoryItems/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Type")] OrderItemDetail orderItemDetail)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Type,QuantityRemaining,PricePerUnit")] InventoryItem inventoryItem)
         {
-            if (id != orderItemDetail.ID)
+            if (id != inventoryItem.ID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace RelevantPizza.Controllers
             {
                 try
                 {
-                    _context.Update(orderItemDetail);
+                    _context.Update(inventoryItem);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderItemDetailExists(orderItemDetail.ID))
+                    if (!InventoryItemExists(inventoryItem.ID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace RelevantPizza.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(orderItemDetail);
+            return View(inventoryItem);
         }
 
-        // GET: OrderItemDetails/Delete/5
+        // GET: InventoryItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace RelevantPizza.Controllers
                 return NotFound();
             }
 
-            var orderItemDetail = await _context.OrderItemDetails
+            var inventoryItem = await _context.InventoryItems
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (orderItemDetail == null)
+            if (inventoryItem == null)
             {
                 return NotFound();
             }
 
-            return View(orderItemDetail);
+            return View(inventoryItem);
         }
 
-        // POST: OrderItemDetails/Delete/5
+        // POST: InventoryItems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var orderItemDetail = await _context.OrderItemDetails.FindAsync(id);
-            _context.OrderItemDetails.Remove(orderItemDetail);
+            var inventoryItem = await _context.InventoryItems.FindAsync(id);
+            _context.InventoryItems.Remove(inventoryItem);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderItemDetailExists(int id)
+        private bool InventoryItemExists(int id)
         {
-            return _context.OrderItemDetails.Any(e => e.ID == id);
+            return _context.InventoryItems.Any(e => e.ID == id);
         }
     }
 }
