@@ -45,16 +45,19 @@ namespace RelevantPizza.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderItemDetails",
+                name: "InventoryItems",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    QuantityRemaining = table.Column<int>(nullable: false),
+                    PricePerUnit = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderItemDetails", x => x.ID);
+                    table.PrimaryKey("PK_InventoryItems", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,11 +80,11 @@ namespace RelevantPizza.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CustomerID = table.Column<int>(nullable: true),
+                    CustomerID = table.Column<int>(nullable: false),
                     OrderType = table.Column<int>(nullable: false),
                     DriverID = table.Column<int>(nullable: true),
-                    DriverOut = table.Column<DateTime>(nullable: false),
-                    DriverIn = table.Column<DateTime>(nullable: false)
+                    DriverOut = table.Column<DateTime>(nullable: true),
+                    DriverIn = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -91,7 +94,7 @@ namespace RelevantPizza.Migrations
                         column: x => x.CustomerID,
                         principalTable: "Customers",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Employees_DriverID",
                         column: x => x.DriverID,
@@ -114,7 +117,7 @@ namespace RelevantPizza.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderItemDetails");
+                name: "InventoryItems");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");

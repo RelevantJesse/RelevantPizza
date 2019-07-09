@@ -25,6 +25,6 @@ namespace RelevantPizza.Models
         public DateTime? DriverIn { get; set; }
 
         [Required]
-        IEnumerable<OrderItem> OrderItems { get; set; }
+        public IEnumerable<OrderItem> OrderItems { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using RelevantPizza.Data;
 namespace RelevantPizza.Migrations
 {
     [DbContext(typeof(PizzaContext))]
-    [Migration("20190703010114_InitialCreate")]
+    [Migration("20190709001810_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,19 +67,38 @@ namespace RelevantPizza.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("RelevantPizza.Models.InventoryItem", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<decimal>("PricePerUnit");
+
+                    b.Property<int>("QuantityRemaining");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("InventoryItems");
+                });
+
             modelBuilder.Entity("RelevantPizza.Models.Order", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CustomerID");
+                    b.Property<int>("CustomerID");
 
                     b.Property<int?>("DriverID");
 
-                    b.Property<DateTime>("DriverIn");
+                    b.Property<DateTime?>("DriverIn");
 
-                    b.Property<DateTime>("DriverOut");
+                    b.Property<DateTime?>("DriverOut");
 
                     b.Property<int>("OrderType");
 
@@ -107,24 +126,12 @@ namespace RelevantPizza.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("RelevantPizza.Models.OrderItemDetail", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("OrderItemDetails");
-                });
-
             modelBuilder.Entity("RelevantPizza.Models.Order", b =>
                 {
                     b.HasOne("RelevantPizza.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("CustomerID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("RelevantPizza.Models.Employee", "Driver")
                         .WithMany()

@@ -69,15 +69,20 @@ namespace RelevantPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,OrderType")] Order order)
+        public async Task<IActionResult> Create([Bind("ID,CustomerID,OrderType")] OrderAddViewModel orderVM)
         {
             if (ModelState.IsValid)
             {
+                Order order = new Order();
+                order.Customer = _context.Customers.FirstOrDefault(c => c.ID == orderVM.CustomerID);
+                order.OrderType = orderVM.OrderType;
+                order.OrderItems = new List<OrderItem>();
+
                 _context.Add(order);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(orderVM);
         }
 
         // GET: Orders/Edit/5
