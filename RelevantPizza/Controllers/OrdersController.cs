@@ -169,5 +169,10 @@ namespace RelevantPizza.Controllers
         {
             return _context.Orders.Any(e => e.ID == id);
         }
+
+        public async Task<IActionResult> AddItem()
+        {
+            return RedirectToAction("Create", "OrderItems");
+        }
     }
 }
