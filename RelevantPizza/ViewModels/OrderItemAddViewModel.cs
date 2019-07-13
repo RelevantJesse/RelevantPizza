@@ -13,8 +13,14 @@ namespace RelevantPizza.ViewModels
         public decimal Price { get; set; }
         public int InventoryID { get; set; }
         public InventoryItemType InventoryItemType { get; set; }
-        IEnumerable<InventoryItem> OrderItemDetails { get; set; }
+        public List<InventoryItem> OrderItemDetails { get; set; }
 
         public IEnumerable<SelectListItem> InventoryList { get; set; }
+
+        public OrderItemAddViewModel()
+        {
+            OrderItemDetails = new List<InventoryItem>();
+            InventoryList = new List<SelectListItem>();
+        }
     }
 }

@@ -47,9 +47,7 @@ namespace RelevantPizza.Controllers
         // GET: OrderItems/Create
         public IActionResult Create()
         {
-            OrderItemAddViewModel vm = new OrderItemAddViewModel();
-            vm.InventoryList = new List<SelectListItem>();
-            return View(vm);
+            return View();
         }
 
         // POST: OrderItems/Create
@@ -73,7 +71,7 @@ namespace RelevantPizza.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetInventoryItems([Bind("InventoryItemType")] OrderItemAddViewModel orderItemVM)
+        public IActionResult GetInventoryItems(OrderItemAddViewModel orderItemVM)
         {
             List<InventoryItem> inventoryItems = _context.InventoryItems.Where(i => i.Type == orderItemVM.InventoryItemType).ToList();
             var inventoryItemsList = new List<SelectListItem>();
@@ -87,7 +85,14 @@ namespace RelevantPizza.Controllers
             }
 
             orderItemVM.InventoryList = inventoryItemsList;
-            return RedirectToAction("Create", "OrderItems", orderItemVM);
+            return View("Create", orderItemVM);
+        }
+
+        public IActionResult AddInventoryItemToOrderItem(OrderItemAddViewModel orderItemVM)
+        {
+            orderItemVM.OrderItemDetails.Add(_context.InventoryItems.FirstOrDefault(i => i.ID == orderItemVM.InventoryID));
+            
+            return View("Create", orderItemVM);
         }
 
         // GET: OrderItems/Edit/5
